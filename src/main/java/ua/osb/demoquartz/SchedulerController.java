@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,6 +46,12 @@ public class SchedulerController {
         return ResponseEntity.badRequest().body(e.getErrorMessage());
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity handleRuntime(RuntimeException e) {
+        return ResponseEntity.status(500).body(String.format("%s\nStack Trace:\n%s",
+                e.getMessage(), Arrays.toString(e.getStackTrace())));
+    }
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -61,7 +68,7 @@ public class SchedulerController {
             this.failedParameters = failedParameters;
         }
 
-        public String getErrorMessage() {
+        String getErrorMessage() {
             StringBuilder sb = new StringBuilder();
             sb.append("Failed fields:");
             failedParameters.forEach(param -> sb.append(" ").append(param));

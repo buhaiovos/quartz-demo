@@ -6,3 +6,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+quartz:
+  hello-message:
+    job:
+      name: job1
+    trigger:
+      name: trigger1
+      group: group1
