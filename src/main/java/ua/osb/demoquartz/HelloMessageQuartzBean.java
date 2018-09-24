@@ -28,12 +28,28 @@ public class HelloMessageQuartzBean {
     void scheduleJob() {
         startScheduler();
 
+        if (isFirstRun()) {
+            initializeScheduling();
+        }
+    }
+
+    private boolean isFirstRun() {
+        try {
+            return !jobOrTriggerExists();
+        } catch (SchedulerException e) {
+            log.error("Error while scheduler querying.", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean jobOrTriggerExists() throws SchedulerException {
+        return scheduler.checkExists(new JobKey(jobName)) || scheduler.checkExists(new TriggerKey(triggerName, triggerGroup));
+    }
+
+    private void initializeScheduling() {
         JobDetail job = buildJob();
-
         addJobToSchedulerForReuse(job);
-
         Trigger trigger = buildTriggerWithRepeatInterval(job);
-
         scheduleJob(trigger);
     }
 

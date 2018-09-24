@@ -1,5 +1,6 @@
 spring:
   datasource:
+    name: MyDataSource
     url: jdbc:mysql://localhost:3306/quartzdemo
     username: root
     password: root
@@ -14,3 +15,6 @@ quartz:
     trigger:
       name: trigger1
       group: group1
+
+server:
+  port: 8081

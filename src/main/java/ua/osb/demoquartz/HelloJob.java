@@ -10,5 +10,10 @@ public class HelloJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) {
         final String helloMessage = System.getenv("hello.message");
         log.info(helloMessage);
+        try {
+            Thread.sleep(5_000);
+        } catch (InterruptedException e) {
+            log.warn("Failed to sleep for 10 seconds");
+        }
     }
 }
